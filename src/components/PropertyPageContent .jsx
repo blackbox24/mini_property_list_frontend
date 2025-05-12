@@ -9,6 +9,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Chip from '@mui/material/Chip';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
+import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import FormControl from '@mui/material/FormControl';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -62,6 +63,7 @@ const StyledTypography = styled(Typography)({
 
 export default function PropertyPageContent() {
   const [focusedCardIndex, setFocusedCardIndex] = React.useState(null);
+  const [data, setData] = React.useState(null)
 
   const handleFocus = (index) => {
     setFocusedCardIndex(index);
@@ -74,6 +76,23 @@ export default function PropertyPageContent() {
   const handleClick = () => {
     console.Log('You clicked the filter chip.');
   };
+
+  React.useEffect(()=>{
+    async function getProperties() {
+      try {
+        const response = await fetch("http://127.0.0.1:3000/api/properties/",);
+        if(!response.ok){
+          throw new Error(`Response status: ${response.status}`)
+        }
+        const json = await response.json();
+        console.log(json);
+        setData(json);
+      } catch (error) {
+        console.error("error: "+error);
+      }
+    }
+    getProperties();
+  },[]);
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
@@ -102,7 +121,8 @@ export default function PropertyPageContent() {
       <Grid container spacing={4} columns={12}>
         
           {
-            cardData.map((data,index)=>
+            data?
+            data?.map((data,index)=>
               <Grid size={{ xs: 12, md: 4 }} key={data.id}>
               <SyledCard
                 variant="outlined"
@@ -138,6 +158,11 @@ export default function PropertyPageContent() {
               </SyledCard>
             </Grid>
             )
+            :
+            
+            <Typography variant="h4" className="font-bold mb-4 text-center">
+              No data found
+            </Typography>
           }
       </Grid>
     </Box>
