@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {useParams} from "react-router-dom";
 import PropTypes from 'prop-types';
 import Avatar from '@mui/material/Avatar';
 import AvatarGroup from '@mui/material/AvatarGroup';
@@ -14,10 +15,9 @@ import FormControl from '@mui/material/FormControl';
 import InputAdornment from '@mui/material/InputAdornment';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import { styled } from '@mui/material/styles';
-import { green } from '@mui/material/colors';
 import Icon from '@mui/material/Icon';
 import Button from "@mui/material/Button";
-import {Link} from "react-router-dom";
+
 import cardData from "../utils/mockdata";
 
 const SyledCard = styled(Card)(({ theme }) => ({
@@ -59,9 +59,10 @@ const StyledTypography = styled(Typography)({
 
 
 
-export default function MainContent() {
+export default function DetailPageContent() {
+  const {propertyId} = useParams();
+  const data = cardData.filter((data)=>data.id == propertyId);
   const [focusedCardIndex, setFocusedCardIndex] = React.useState(null);
-
   const handleFocus = (index) => {
     setFocusedCardIndex(index);
   };
@@ -78,7 +79,7 @@ export default function MainContent() {
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
       <div>
         <Typography variant="h3" gutterBottom className="text-center">
-          Latest Properties
+          {data[0].title} Property
         </Typography>
       </div>
       
@@ -102,25 +103,22 @@ export default function MainContent() {
             overflow: 'auto',
           }}
         >
-          <Button variant="contained" color="primary" size="large">
-            <Link to="/add-property">Add Property</Link>
-          </Button>
         </Box>
       </Box>
 
       {/* Property listings cards */}
-      <Grid container spacing={4} columns={12}>
+      <Grid container spacing={0} columns={12}>
         
           {
-            cardData.map((data,index)=>
-              <Grid size={{ xs: 12, md: 4 }} key={data.id}>
+            data.map((data,index)=>
+              <Grid size={{ xs: 12, md: 12 }} key={data.id}>
               <SyledCard
                 variant="outlined"
                 onFocus={() => handleFocus(2)}
                 onBlur={handleBlur}
                 tabIndex={0}
                 className={focusedCardIndex === 2 ? 'Mui-focused' : ''}
-                sx={{ height: '100%' }}
+                sx={{ height: '100%' ,width: '100%' }}
               >
                 <CardMedia
                   component="img"
@@ -142,10 +140,6 @@ export default function MainContent() {
                     {data.description}
                   </StyledTypography>
                 </SyledCardContent>
-                
-                <Button variant="contained" color="primary" size="large">
-                  <Link to={"/property-detail/"+data.id}>View Propery</Link>
-                </Button>
               </SyledCard>
             </Grid>
             )

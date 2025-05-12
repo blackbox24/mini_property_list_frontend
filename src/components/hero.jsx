@@ -3,6 +3,7 @@ import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
+import {Link} from "react-router-dom";
 
 
 const Hero = () => {
@@ -18,7 +19,7 @@ const Hero = () => {
                     </Typography>
                 </div>
             <Button variant="contained" color="primary" size="large">
-                Browse Properties
+                <Link to="/properties">Browse Properties</Link>
             </Button>
             </Container>
         </Box>

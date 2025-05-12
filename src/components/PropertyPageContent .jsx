@@ -16,8 +16,9 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import { styled } from '@mui/material/styles';
 import { green } from '@mui/material/colors';
 import Icon from '@mui/material/Icon';
-import Button from "@mui/material/Button";
 import {Link} from "react-router-dom";
+import Button from "@mui/material/Button";
+
 import cardData from "../utils/mockdata";
 
 const SyledCard = styled(Card)(({ theme }) => ({
@@ -59,7 +60,7 @@ const StyledTypography = styled(Typography)({
 
 
 
-export default function MainContent() {
+export default function PropertyPageContent() {
   const [focusedCardIndex, setFocusedCardIndex] = React.useState(null);
 
   const handleFocus = (index) => {
@@ -71,14 +72,14 @@ export default function MainContent() {
   };
 
   const handleClick = () => {
-    console.info('You clicked the filter chip.');
+    console.Log('You clicked the filter chip.');
   };
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
       <div>
         <Typography variant="h3" gutterBottom className="text-center">
-          Latest Properties
+          All Properties
         </Typography>
       </div>
       
@@ -94,18 +95,7 @@ export default function MainContent() {
         }}
       >
         {/* Add property button */}
-        <Box
-          sx={{
-            display: 'inline-flex',
-            flexDirection: 'row',
-            gap: 3,
-            overflow: 'auto',
-          }}
-        >
-          <Button variant="contained" color="primary" size="large">
-            <Link to="/add-property">Add Property</Link>
-          </Button>
-        </Box>
+        
       </Box>
 
       {/* Property listings cards */}
@@ -142,7 +132,6 @@ export default function MainContent() {
                     {data.description}
                   </StyledTypography>
                 </SyledCardContent>
-                
                 <Button variant="contained" color="primary" size="large">
                   <Link to={"/property-detail/"+data.id}>View Propery</Link>
                 </Button>
