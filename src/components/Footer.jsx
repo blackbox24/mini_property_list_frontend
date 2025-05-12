@@ -58,7 +58,7 @@ export default function Footer() {
             }}
           >
             <Box sx={{ width: { xs: '100%', sm: '60%' } }}>
-              <SitemarkIcon />
+              {/* <SitemarkIcon /> */}
               <Typography
                 variant="body2"
                 gutterBottom
@@ -106,42 +106,13 @@ export default function Footer() {
             }}
           >
             <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
-              Product
+              Home
             </Typography>
             <Link color="text.secondary" variant="body2" href="#">
-              Features
-            </Link>
-            <Link color="text.secondary" variant="body2" href="#">
-              Testimonials
-            </Link>
-            <Link color="text.secondary" variant="body2" href="#">
-              Highlights
-            </Link>
-            <Link color="text.secondary" variant="body2" href="#">
-              Pricing
+              Properties
             </Link>
             <Link color="text.secondary" variant="body2" href="#">
               FAQs
-            </Link>
-          </Box>
-          <Box
-            sx={{
-              display: { xs: 'none', sm: 'flex' },
-              flexDirection: 'column',
-              gap: 1,
-            }}
-          >
-            <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
-              Company
-            </Typography>
-            <Link color="text.secondary" variant="body2" href="#">
-              About us
-            </Link>
-            <Link color="text.secondary" variant="body2" href="#">
-              Careers
-            </Link>
-            <Link color="text.secondary" variant="body2" href="#">
-              Press
             </Link>
           </Box>
           <Box
