@@ -1,16 +1,20 @@
 import * as React from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
 import Container from '@mui/material/Container';
-// import ResponsiveAppBar from './components/AppAppBar';
+import ResponsiveAppBar from './components/AppAppBar';
 import MainContent from './components/MainContent';
-// import Latest from './components/Latest';
-// import Footer from './components/Footer';
+import Latest from './components/Latest';
+import Footer from './components/Footer';
+import Hero from "./components/hero";
+
+// import { BrowserRouter, Routes, Route, Link, useNavigate } from "react-router-dom";
 
 export default function Blog(props) {
   return (
     <>
       <CssBaseline enableColorScheme />
-      {/* <ResponsiveAppBar /> */}
+      <ResponsiveAppBar />
+      <Hero/>
       <Container
         maxWidth="lg"
         component="main"
@@ -19,7 +23,7 @@ export default function Blog(props) {
         <MainContent />
         {/* <Latest /> */}
       </Container>
-      {/* <Footer /> */}
+      <Footer />
     </>
   );
 }
