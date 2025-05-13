@@ -121,7 +121,7 @@ export default function PropertyPageContent() {
       <Grid container spacing={4} columns={12}>
         
           {
-            data?.length === 0?
+            
             data?.map((data,index)=>
               <Grid size={{ xs: 12, md: 4 }} key={data.id}>
               <SyledCard
@@ -158,11 +158,11 @@ export default function PropertyPageContent() {
               </SyledCard>
             </Grid>
             )
-            :
+            // :
             
-            <Typography variant="h4" className="font-bold mb-4 text-center">
-              No data found
-            </Typography>
+            // <Typography variant="h4" className="font-bold mb-4 text-center">
+            //   No data found
+            // </Typography>
           }
       </Grid>
     </Box>
