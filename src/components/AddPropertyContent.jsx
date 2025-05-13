@@ -1,18 +1,17 @@
 import * as React from 'react';
+import { useState } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Checkbox from '@mui/material/Checkbox';
 import CssBaseline from '@mui/material/CssBaseline';
-import Divider from '@mui/material/Divider';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormLabel from '@mui/material/FormLabel';
 import FormControl from '@mui/material/FormControl';
-import Link from '@mui/material/Link';
+import FormLabel from '@mui/material/FormLabel';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import MuiCard from '@mui/material/Card';
 import { styled } from '@mui/material/styles';
+import { Snackbar, Alert } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -57,29 +56,70 @@ const SignUpContainer = styled(Stack)(({ theme }) => ({
 }));
 
 export default function AddPropertyForm(props) {
-  const [error, setError] = React.useState(null);
-  const [formData, setFormData] = React.useState({
-    "name":"",
-    "description":"",
-    "price":0,
-    "location":"",
-    "image_url":"",
-  })
+  const navigate  = useNavigate();
+  const [error, setError] = useState(null);
+  const [message, setMessage] = useState('');
+  const [severity, setSeverity] = useState('success');
+  const [open, setOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    description: '',
+    price: '',
+    location: '',
+  });
+  const [image, setImage] = useState(null); // Store file object
 
-  const validateInputs = () => {
-    const {name,description,price,location,image_url} = formData;
-
-    let isValid = true;
-    return isValid;
+  const showToast = (msg, sev) => {
+    setMessage(msg);
+    setSeverity(sev);
+    setOpen(true);
   };
 
-  const handleSubmit = (event) => {
-    if (error !== null) {
-      event.preventDefault();
-      return;
+  const handleCloseToast = () => {
+    setOpen(false);
+    setMessage('');
+    setSeverity('success');
+  };
+
+
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleImageChange = (e) => {
+    setImage(e.target.files[0]); // Store file object
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    const data = new FormData();
+    data.append('name', formData.name);
+    data.append('description', formData.description);
+    data.append('price', formData.price);
+    data.append('location', formData.location);
+    if (image) data.append('image_url', image); // Append file
+
+    try {
+      const response = await fetch('http://127.0.0.1:3000/api/properties/', {
+        method: 'POST',
+        body: data, // Use FormData, not JSON
+      });
+      const result = await response.json();
+      if (response.ok) {
+        setError(null);
+        showToast('Property added successfully', 'success');
+        navigate('/properties',{ replace: true }); // Redirect to properties page
+      } else {
+        showToast("Error: Unable to save data ", 'error');
+        setError(result.error || {});
+      }
+    } catch (error) {
+      showToast('Error: Could not connect to server', 'error');
+      console.error('Error:', error);
+      setError({ general: 'Server error' });
     }
-    const data = new FormData(event.currentTarget);
-    console.log(data);
   };
 
   return (
@@ -107,8 +147,10 @@ export default function AddPropertyForm(props) {
                 required
                 fullWidth
                 id="name"
+                onChange={handleChange}
                 placeholder="Adisko"
-                error={error?.name}
+                error={!!error?.name}
+                helperText={error?.name || ''}
                 color={error?.name ? 'error' : 'primary'}
               />
             </FormControl>
@@ -119,8 +161,11 @@ export default function AddPropertyForm(props) {
                 fullWidth
                 id="description"
                 placeholder="Description"
-                name="descriptions"
-                autoComplete="descriptions"
+                name="description"
+                onChange={handleChange}
+                error={!!error?.description}
+                helperText={error?.description || ''}
+                autoComplete="description"
                 variant="outlined"
               />
             </FormControl>
@@ -133,47 +178,61 @@ export default function AddPropertyForm(props) {
                 placeholder=""
                 type="number"
                 id="price"
-                autoComplete="new-price"
+                onChange={handleChange}
+                error={!!error?.price}
+                helperText={error?.price || ''}
+                autoComplete="price"
                 variant="outlined"
               />
             </FormControl>
             <FormControl>
-              <FormLabel htmlFor="location">location</FormLabel>
+              <FormLabel htmlFor="location">Location</FormLabel>
               <TextField
                 required
                 fullWidth
                 name="location"
                 placeholder="Kumasi Ghana"
-                type="location"
+                type="text"
                 id="location"
-                autoComplete="new-location"
+                onChange={handleChange}
+                error={!!error?.location}
+                helperText={error?.location || ''}
+                autoComplete="location"
                 variant="outlined"
               />
             </FormControl>
             <FormControl>
-              <FormLabel htmlFor="image_url">location</FormLabel>
-              <TextField
+              <FormLabel htmlFor="image">Image</FormLabel>
+              <input
                 required
-                fullWidth
-                name="image_url"
-                placeholder=""
                 type="file"
-                id="image_url"
-                autoComplete="new-image_url"
-                variant="outlined"
+                accept="image/jpeg,image/png,image/gif"
+                id="image"
+                onChange={handleImageChange}
+                style={{ marginTop: '8px' }}
               />
+              {error?.image && (
+                <Typography color="error" variant="caption">
+                  {error.image}
+                </Typography>
+              )}
             </FormControl>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              onClick={validateInputs}
-            >
+            <Button type="submit" fullWidth variant="contained">
               Submit
             </Button>
           </Box>
         </Card>
       </SignUpContainer>
-      </>
+      <Snackbar
+        open={open}
+        autoHideDuration={6000}
+        onClose={handleCloseToast}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert onClose={handleCloseToast} severity={severity} sx={{ width: '100%' }}>
+          {message}
+        </Alert>
+      </Snackbar>
+    </>
   );
 }

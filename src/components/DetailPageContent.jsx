@@ -61,7 +61,20 @@ const StyledTypography = styled(Typography)({
 
 export default function DetailPageContent() {
   const {propertyId} = useParams();
-  const data = cardData.filter((data)=>data.id == propertyId);
+  const [data, setCardData] = React.useState([]);
+  React.useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`http://127.0.0.1:3000/api/properties/${propertyId}`);
+        const jsonData = await response.json();
+        setCardData(jsonData);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    }
+    fetchData();
+  }, [propertyId]);
+
   const [focusedCardIndex, setFocusedCardIndex] = React.useState(null);
   const handleFocus = (index) => {
     setFocusedCardIndex(index);
@@ -79,7 +92,7 @@ export default function DetailPageContent() {
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
       <div>
         <Typography variant="h3" gutterBottom className="text-center">
-          {data[0].title} Property
+          {data.name} Property
         </Typography>
       </div>
       
@@ -107,43 +120,48 @@ export default function DetailPageContent() {
       </Box>
 
       {/* Property listings cards */}
-      <Grid container spacing={0} columns={12}>
-        
-          {
-            data.map((data,index)=>
-              <Grid size={{ xs: 12, md: 12 }} key={data.id}>
-              <SyledCard
-                variant="outlined"
-                onFocus={() => handleFocus(2)}
-                onBlur={handleBlur}
-                tabIndex={0}
-                className={focusedCardIndex === 2 ? 'Mui-focused' : ''}
-                sx={{ height: '100%' ,width: '100%' }}
-              >
-                <CardMedia
-                  component="img"
-                  alt="green iguana"
-                  image={data.image_url}
-                  sx={{
-                    height: { sm: 'auto', md: '50%' },
-                    aspectRatio: { sm: '16 / 9', md: '' },
-                  }}
-                />
-                <SyledCardContent>
-                  <Typography gutterBottom variant="caption" component="div">
-                    GH₵{data.price}
-                  </Typography>
-                  <Typography gutterBottom variant="h6" component="div">
-                    {data.title}
-                  </Typography>
-                  <StyledTypography variant="body2" color="text.secondary" gutterBottom>
-                    {data.description}
-                  </StyledTypography>
-                </SyledCardContent>
-              </SyledCard>
-            </Grid>
-            )
-          }
+      <Grid container spacing={0} columns={12}> 
+        <Grid size={{ xs: 12, md: 12 }} key={data.id}>
+        <SyledCard
+          variant="outlined"
+          onFocus={() => handleFocus(2)}
+          onBlur={handleBlur}
+          tabIndex={0}
+          className={focusedCardIndex === 2 ? 'Mui-focused' : ''}
+          sx={{ height: '100%' ,width: '100%' }}
+        >
+          <CardMedia
+            component="img"
+            alt="green iguana"
+            image={data.image_url ? `http://127.0.0.1:3000/${data.image_url}` : "https://picsum.photos/800/450?random=3"}
+            sx={{
+              height: { sm: 'auto', md: '50%' },
+              aspectRatio: { sm: '16 / 9', md: '' },
+            }}
+          />
+          <SyledCardContent>
+            <Typography gutterBottom variant="caption" component="div">
+              GH₵{data.price}
+            </Typography>
+            <Typography gutterBottom variant="h3" component="div">
+              {data.name}
+            </Typography>
+            <StyledTypography variant="body2" color="text.secondary" gutterBottom>
+              {data.description}
+            </StyledTypography>
+            <StyledTypography variant="body2" color="text.secondary" gutterBottom>
+              {data.location}
+            </StyledTypography>
+            <StyledTypography variant="body2" color="text.secondary" gutterBottom>
+              {new Date(data.createdAt).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+              })}
+            </StyledTypography>
+          </SyledCardContent>
+        </SyledCard>
+      </Grid>
       </Grid>
     </Box>
   );

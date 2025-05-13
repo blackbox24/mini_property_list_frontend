@@ -18,7 +18,7 @@ import { green } from '@mui/material/colors';
 import Icon from '@mui/material/Icon';
 import Button from "@mui/material/Button";
 import {Link} from "react-router-dom";
-import cardData from "../utils/mockdata";
+// import cardData from "../utils/mockdata";
 
 const SyledCard = styled(Card)(({ theme }) => ({
   display: 'flex',
@@ -73,6 +73,22 @@ export default function MainContent() {
   const handleClick = () => {
     console.info('You clicked the filter chip.');
   };
+  const [cardData, setCardData] = React.useState(null);
+  React.useEffect(()=>{
+    async function getProperties() {
+      try {
+        const response = await fetch("http://127.0.0.1:3000/api/properties/",);
+        if(!response.ok){
+          throw new Error(`Response status: ${response.status}`)
+        }
+        const json = await response.json();
+        setCardData(json);
+      } catch (error) {
+        console.error("error: "+error);
+      }
+    }
+    getProperties();
+  },[]);
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
@@ -112,7 +128,7 @@ export default function MainContent() {
       <Grid container spacing={4} columns={12}>
         
           {
-            cardData.map((data,index)=>
+            cardData?.map((data,index)=>
               <Grid size={{ xs: 12, md: 4 }} key={data.id}>
               <SyledCard
                 variant="outlined"
@@ -125,7 +141,7 @@ export default function MainContent() {
                 <CardMedia
                   component="img"
                   alt="green iguana"
-                  image={data.image_url}
+                  image={data.image_url ? `http://127.0.0.1:3000/${data.image_url}` : "https://picsum.photos/800/450?random=3"}
                   sx={{
                     height: { sm: 'auto', md: '50%' },
                     aspectRatio: { sm: '16 / 9', md: '' },

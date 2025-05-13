@@ -135,7 +135,7 @@ export default function PropertyPageContent() {
                 <CardMedia
                   component="img"
                   alt="green iguana"
-                  image={data.image_url}
+                  image={data.image_url ? `http://127.0.0.1:3000/${data.image_url}` : "https://picsum.photos/800/450?random=3"}
                   sx={{
                     height: { sm: 'auto', md: '50%' },
                     aspectRatio: { sm: '16 / 9', md: '' },
