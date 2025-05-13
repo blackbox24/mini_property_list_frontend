@@ -1,7 +1,7 @@
 # Mini Property Listing Application
 
 ### Project Overview
-    This is the frontend for a Mini Property Listings Web Application built as part of a 3-Day Role Challenge. The application allows users to view a list of properties, see detailed information about a specific property, and add new properties via a form. The frontend is built using React (Vite), Tailwind CSS, and Material UI (MUI), with a focus on responsive design and clean, reusable code.
+This is the frontend for a Mini Property Listings Web Application built as part of a 3-Day Role Challenge. The application allows users to view a list of properties, see detailed information about a specific property, and add new properties via a form. The frontend is built using React (Vite), Tailwind CSS, and Material UI (MUI), with a focus on responsive design and clean, reusable code.
 
 ### Features
 
