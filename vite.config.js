@@ -1,10 +1,11 @@
-// vite.config.js
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
-import tailwindcss from '@tailwindcss/vite';
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import tailwindcss from "@tailwindcss/vite"
+// import vercel from 'vite-plugin-vercel'
 
+// https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), tailwindcss()],
+  plugins: [react(),tailwindcss()],
   server: {
     port: 5500,
     open: true,
@@ -12,9 +13,9 @@ export default defineConfig({
       '/api': {
         target: 'https://simplepropertylistappbackend-production.up.railway.app',
         changeOrigin: true,
-        secure: true, // Required for HTTPS
-        rewrite: (path) => path.replace(/^\/api/, '/api'), // Keep /api in the target URL
-      },
-    },
+        secure: true,
+        rewrite: (path) => path.replace(/^\/api/, '')
+      }
+    }
   },
-});
+})
