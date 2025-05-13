@@ -85,6 +85,7 @@ export default function PropertyPageContent() {
           throw new Error(`Response status: ${response.status}`)
         }
         const json = await response.json();
+        console.log(json);
         setData(json);
       } catch (error) {
         console.error("error: "+error);
@@ -120,7 +121,7 @@ export default function PropertyPageContent() {
       <Grid container spacing={4} columns={12}>
         
           {
-            data.length === 0 ?
+            data?.length === 0?
             data?.map((data,index)=>
               <Grid size={{ xs: 12, md: 4 }} key={data.id}>
               <SyledCard
