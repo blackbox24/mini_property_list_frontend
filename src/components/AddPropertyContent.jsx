@@ -12,6 +12,7 @@ import MuiCard from '@mui/material/Card';
 import { styled } from '@mui/material/styles';
 import { Snackbar, Alert } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import baseUrl from '../utils/baseUrl';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -102,7 +103,7 @@ export default function AddPropertyForm(props) {
     if (image) data.append('image_url', image); // Append file
 
     try {
-      const response = await fetch('http://127.0.0.1:3000/api/properties/', {
+      const response = await fetch(`${baseUrl}/api/properties/`, {
         method: 'POST',
         body: data, // Use FormData, not JSON
       });

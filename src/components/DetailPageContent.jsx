@@ -18,7 +18,7 @@ import { styled } from '@mui/material/styles';
 import Icon from '@mui/material/Icon';
 import Button from "@mui/material/Button";
 
-import cardData from "../utils/mockdata";
+import baseUrl from "../utils/baseUrl";
 
 const SyledCard = styled(Card)(({ theme }) => ({
   display: 'flex',
@@ -65,7 +65,7 @@ export default function DetailPageContent() {
   React.useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`http://127.0.0.1:3000/api/properties/${propertyId}`);
+        const response = await fetch(`${baseUrl}/api/properties/${propertyId}`);
         const jsonData = await response.json();
         setCardData(jsonData);
       } catch (error) {
@@ -133,7 +133,7 @@ export default function DetailPageContent() {
           <CardMedia
             component="img"
             alt="green iguana"
-            image={data.image_url ? `http://127.0.0.1:3000/${data.image_url}` : "https://picsum.photos/800/450?random=3"}
+            image={data.image_url ? `${baseUrl}/${data.image_url}` : "https://picsum.photos/800/450?random=3"}
             sx={{
               height: { sm: 'auto', md: '50%' },
               aspectRatio: { sm: '16 / 9', md: '' },
